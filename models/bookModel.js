@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 
 // סכמה כיצד הקולקשן/טבלה של המוצרים נראת והסוג של כל מאפיין
-// BOOKS SCHEMA 
 let bookSchema = new mongoose.Schema({
     name: String,
     description: String,
