@@ -1,0 +1,83 @@
+[{
+        "name": "construction",
+        "description": "Family physics",
+        "reliseDate": "2002-10-02",
+        "writer": "Irena Osockin",
+        "img_url": "",
+        "categories": "psychology"
+
+
+    },
+    {
+        "name": "A kiss for little bear",
+        "description": "A story about a teddy bear that draws beautiful drawings",
+        "reliseDate": "1968-08-11",
+        "writer": "Else Holmelund Minarik",
+        "img_url": "",
+        "categories": "children"
+    },
+    {
+        "name": "Principles",
+        "description": "Family physics",
+        "reliseDate": "2001-11-08",
+        "writer": "Irena Osockin",
+        "img_url": "",
+        "categories": "psychology"
+    },
+    {
+        "name": "A parent as a supporter",
+        "description": "Family physics",
+        "reliseDate": "2003-10-05",
+        "writer": "Irena Osockin",
+        "img_url": "",
+        "categories": "psychology"
+    },
+    {
+        "name": "The role of women",
+        "description": "Family physics",
+        "reliseDate": "2004-10-05",
+        "writer": "Irena Osockin",
+        "img_url": "",
+        "categories": "psychology"
+    },
+    {
+        "name": "business table",
+        "description": "Family physics",
+        "reliseDate": "2005-10-05",
+        "writer": "Irena Osockin",
+        "img_url": "",
+        "categories": "psychology"
+    },
+    {
+        "name": "choice",
+        "description": "Family physics",
+        "reliseDate": "2006-10-08",
+        "writer": "Irena Osockin",
+        "img_url": "",
+        "categories": "psychology"
+    },
+    {
+        "name": "The Little Mermaid",
+        "description": "A story about a mermaid who falls in love with a prince",
+        "reliseDate": "2006-10-08",
+        "writer": "Hanes Kristian Andersn",
+        "img_url": "",
+        "categories": "children"
+    },
+    {
+        "name": "Harry Potter and the Philosopher's Stone",
+        "description": "At Hogwarts School of Witchcraft and Wizardry, Harry will soon be in a maelstrom of incredible adventures.",
+        "reliseDate": "2006-10-05",
+        "writer": "Joanne Rowling",
+        "img_url": "",
+        "categories": "fantasy"
+    }
+
+
+
+
+
+
+
+
+]
