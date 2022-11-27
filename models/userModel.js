@@ -29,6 +29,7 @@ let userSchema = new mongoose.Schema({
 exports.UserModel = mongoose.model("users", userSchema);
 
 exports.validUser = (_reqBody) => {
+    console.log("validUser" + _reqBody);
     let joiSchema = Joi.object({
         name: Joi.string().min(2).max(99).required(),
         email: Joi.string().min(2).max(99).email().required(),

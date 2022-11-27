@@ -4,6 +4,7 @@ const { UserModel, validUser, validLogin } = require("../models/userModel")
 const router = express.Router();
 
 router.get("/", async(req, res) => {
+    console.log("get");
     let perPage = Math.min(req.query.perPage, 20) || 4;
     let page = req.query.page || 1;
     let sort = req.query.sort || "_id";
@@ -26,6 +27,7 @@ router.get("/", async(req, res) => {
 })
 
 router.post("/", async(req, res) => {
+    console.log("post" + req.body);
     let validateBody = validUser(req.body);
     if (validateBody.error) {
         return res.status(400).json(validateBody.error.details)
