@@ -1,6 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-const { UserModel, userValid, loginValid } = require("../models/userModel")
+const { UserModel, validUser, validLogin } = require("../models/userModel")
 const router = express.Router();
 
 router.get("/", async(req, res) => {
@@ -26,9 +26,9 @@ router.get("/", async(req, res) => {
 })
 
 router.post("/", async(req, res) => {
-    let valdiateBody = userValid(req.body);
-    if (valdiateBody.error) {
-        return res.status(400).json(valdiateBody.error.details)
+    let validateBody = validUser(req.body);
+    if (validateBody.error) {
+        return res.status(400).json(validateBody.error.details)
     }
     try {
         let user = new UserModel(req.body);
@@ -52,9 +52,9 @@ router.post("/", async(req, res) => {
 })
 
 router.post("/login", async(req, res) => {
-    let valdiateBody = loginValid(req.body);
-    if (valdiateBody.error) {
-        return res.status(400).json(valdiateBody.error.details)
+    let validateBody = validLogin(req.body);
+    if (validateBody.error) {
+        return res.status(400).json(validateBody.error.details)
     }
     try {
         // לבדוק אם המייל שנשלח בכלל יש רשומה של משתמש שלו
