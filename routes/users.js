@@ -1,7 +1,9 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-const { UserModel, validUser, validLogin } = require("../models/userModel")
+const { UserModel, validUser, validLogin, createToken } = require("../models/userModel")
 const router = express.Router();
+const { auth } = require("../middlewares/auth");
+
 
 router.get("/", async(req, res) => {
     console.log("get");
@@ -25,6 +27,35 @@ router.get("/", async(req, res) => {
         res.status(500).json({ msg: "err", err })
     }
 })
+
+// בראוטר ניתן להעביר בשרשור המון פונקציות שכדי לעבור אחד מהשני
+// אנחנו צריכים להשתמש בפקודת נקסט שנעביר לפונקציית מידל וואר
+router.get("/myEmail", auth, async(req, res) => {
+    try {
+        // req.tokenData._id -> מגיע מפונקציית האוט שנמצאת בשרשור
+        let user = await UserModel.findOne({ _id: req.tokenData._id }, { email: 1 })
+        res.json(user);
+        //  res.json({msg:"all good 3333" , data:req.tokenData })
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ msg: "err", err })
+    }
+})
+
+// אזור שמחזיר למשתמש את הפרטים שלו לפי הטוקן שהוא שולח
+router.get("/myInfo", auth, async(req, res) => {
+    try {
+        let userInfo = await UserModel.findOne({ _id: req.tokenData._id }, { password: 0 });
+        res.json(userInfo);
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ msg: "err", err })
+    }
+
+
+})
+
+
 
 router.post("/", async(req, res) => {
     console.log("post" + req.body);
@@ -54,27 +85,26 @@ router.post("/", async(req, res) => {
 })
 
 router.post("/login", async(req, res) => {
-    let validateBody = validLogin(req.body);
-    if (validateBody.error) {
-        return res.status(400).json(validateBody.error.details)
+    let validBody = validLogin(req.body);
+    if (validBody.error) {
+        // .details -> מחזיר בפירוט מה הבעיה צד לקוח
+        return res.status(400).json(validBody.error.details);
     }
     try {
-        // לבדוק אם המייל שנשלח בכלל יש רשומה של משתמש שלו
+        // קודם כל לבדוק אם המייל שנשלח קיים  במסד
         let user = await UserModel.findOne({ email: req.body.email })
         if (!user) {
-            // שגיאת אבטחה שנשלחה מצד לקוח
-            return res.status(401).json({ msg: "User and password not match 1" })
+            return res.status(401).json({ msg: "Password or email is worng ,code:1" })
         }
-        // בדיקה הסימא אם מה שנמצא בבאדי מתאים לסיסמא המוצפנת במסד
-        let validPassword = await bcrypt.compare(req.body.password, user.password);
-        if (!validPassword) {
-            return res.status(401).json({ msg: "User and password not match 2" })
+        // אם הסיסמא שנשלחה בבאדי מתאימה לסיסמא המוצפנת במסד של אותו משתמש
+        let authPassword = await bcrypt.compare(req.body.password, user.password);
+        if (!authPassword) {
+            return res.status(401).json({ msg: "Password or email is worng ,code:2" });
         }
-        // בשיעור הבא נדאג לשלוח טוקן למשתמש שיעזור לזהות אותו 
-        // לאחר מכן לראוטרים מסויימים
-        res.json({ msg: "Success, Need to send to client the token" });
+        // מייצרים טוקן לפי שמכיל את האיידי של המשתמש
+        let newToken = createToken(user._id);
+        res.json({ token: newToken });
     } catch (err) {
-
         console.log(err)
         res.status(500).json({ msg: "err", err })
     }

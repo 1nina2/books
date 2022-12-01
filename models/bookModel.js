@@ -8,6 +8,7 @@ let bookSchema = new mongoose.Schema({
     reliseDate: Date,
     writer: String,
     img_url: String,
+    user_id: String,
     date_created: {
         type: Date,
         default: Date.now()

@@ -1,6 +1,7 @@
 const express = require("express");
 const { BookModel, validateBook } = require("../models/bookModel")
 const router = express.Router();
+const { auth } = require("../middlewares/auth");
 
 router.get("/", async(req, res) => {
     // Math.min -> המספר המקסימלי יהיה 20 כדי שהאקר לא ינסה
@@ -28,13 +29,14 @@ router.get("/", async(req, res) => {
 })
 
 // בקשת פוסט ליצירת רשומה חדשה במסד נתונים
-router.post("/", async(req, res) => {
+router.post("/", auth, async(req, res) => {
     let valdiateBody = validateBook(req.body);
     if (valdiateBody.error) {
         return res.status(400).json(valdiateBody.error.details)
     }
     try {
         let book = new BookModel(req.body);
+        book.user_id = req.tokenData._id;
         await book.save();
         res.status(201).json(book)
     } catch (err) {

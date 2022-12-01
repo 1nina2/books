@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
+const jwt = require("jsonwebtoken");
 
 
 let userSchema = new mongoose.Schema({
@@ -27,6 +28,15 @@ let userSchema = new mongoose.Schema({
 })
 
 exports.UserModel = mongoose.model("users", userSchema);
+
+// פונקציה שמייצרת טוקן 
+exports.createToken = (user_id) => {
+    // מייצר טוקן, שם תכולה שלו שזה איי די של המשתמש
+    // מילה סודית שרק לנו מותר להכיר אותה
+    // ותוקף
+    let token = jwt.sign({ _id: user_id }, "PrezmanNina", { expiresIn: "60mins" })
+    return token;
+}
 
 exports.validUser = (_reqBody) => {
     console.log("validUser" + _reqBody);
