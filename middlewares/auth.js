@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { config } = require("../config/secret")
 
 
 // פונקצית מידל וואר שבודקת טוקן
@@ -10,7 +11,7 @@ exports.auth = async(req, res, next) => {
     }
     try {
         // מנסה לפענח את הטוקן ויכיל את כל המטען/מידע שבתוכו
-        let tokenData = jwt.verify(token, "PrezmanNina");
+        let tokenData = jwt.verify(token, config.tokenSecret);
         // דואג להעיבר את המאפיין של הטוקן דאטא לפונקציה הבאה בשרשור
         // שאנחנו מזמנים בנקסט ככה שתיהיה חשופה למידע
         // במקרה הזה האיי די שפענחנו מהטוקן

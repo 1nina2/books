@@ -28,11 +28,29 @@ router.get("/", async(req, res) => {
 
 })
 
+// /cakes/search?s=
+router.get("/search", async(req, res) => {
+    try {
+        let queryS = req.query.s;
+        // מביא את החיפוש בתור ביטוי ולא צריך את כל הביטוי עצמו לחיפוש
+        // i -> מבטל את כל מה שקשור ל CASE SENSITVE
+        let searchReg = new RegExp(queryS, "i")
+        let data = await BookModel.find({ name: searchReg })
+            .limit(50)
+        res.json(data);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ msg: "there error try again later", err })
+    }
+})
+
+
+
 // בקשת פוסט ליצירת רשומה חדשה במסד נתונים
 router.post("/", auth, async(req, res) => {
-    let valdiateBody = validateBook(req.body);
-    if (valdiateBody.error) {
-        return res.status(400).json(valdiateBody.error.details)
+    let validateBody = validateBook(req.body);
+    if (validateBody.error) {
+        return res.status(400).json(validateBody.error.details)
     }
     try {
         let book = new BookModel(req.body);
@@ -52,7 +70,7 @@ router.put("/:idEdit", async(req, res) => {
     }
     try {
         let idEdit = req.params.idEdit
-        let data = await BookModel.updateOne({ _id: idEdit }, req.body)
+        let data = await BookModel.updateOne({ _id: idEdit, user_id: req.tokenData._id }, req.body)
             // modfiedCount:1 - אם יש הצלחה
         res.json(data);
     } catch (err) {
@@ -61,15 +79,14 @@ router.put("/:idEdit", async(req, res) => {
     }
 })
 
-router.delete("/:idDel", async(req, res) => {
+router.delete("/:delId", auth, async(req, res) => {
     try {
-        let idDel = req.params.idDel
-        let data = await BookModel.deleteOne({ _id: idDel })
-            // "deletedCount": 1 -  אם יש הצלחה של מחיקה
+        let delId = req.params.delId;
+        let data = await BookModel.deleteOne({ _id: delId, user_id: req.tokenData._id })
         res.json(data);
     } catch (err) {
-        console.log(err)
-        res.status(500).json({ msg: "err", err })
+        console.log(err);
+        res.status(500).json({ msg: "there error try again later", err })
     }
 })
 
