@@ -5,6 +5,7 @@ const cors = require("cors");
 const { routesInit } = require("./routes/config_routes")
 require("./db/mongoConnect")
 
+
 const app = express();
 app.use(cors())
 
