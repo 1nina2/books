@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const { UserModel, validUser, validLogin, createToken } = require("../models/userModel")
 const router = express.Router();
-const { auth } = require("../middlewares/auth");
+const { auth, authAdmin } = require("../middlewares/auth");
 
 
 router.get("/", async(req, res) => {
@@ -44,16 +44,33 @@ router.get("/myEmail", auth, async(req, res) => {
 
 // אזור שמחזיר למשתמש את הפרטים שלו לפי הטוקן שהוא שולח
 router.get("/myInfo", auth, async(req, res) => {
+        try {
+            let userInfo = await UserModel.findOne({ _id: req.tokenData._id }, { password: 0 });
+            res.json(userInfo);
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ msg: "err", err })
+        }
+
+
+    })
+    // רק משתמש אדמין יוכל להגיע ולהציג את רשימת 
+    // כל המשתמשים
+router.get("/usersList", authAdmin, async(req, res) => {
     try {
-        let userInfo = await UserModel.findOne({ _id: req.tokenData._id }, { password: 0 });
-        res.json(userInfo);
+        let data = await UserModel.find({}, { password: 0 });
+        res.json(data)
     } catch (err) {
         console.log(err)
         res.status(500).json({ msg: "err", err })
     }
-
-
 })
+
+
+
+
+
+
 
 
 
@@ -102,7 +119,7 @@ router.post("/login", async(req, res) => {
             return res.status(401).json({ msg: "Password or email is worng ,code:2" });
         }
         // מייצרים טוקן לפי שמכיל את האיידי של המשתמש
-        let newToken = createToken(user._id);
+        let newToken = createToken(user._id, user.role);
         res.json({ token: newToken });
     } catch (err) {
         console.log(err)

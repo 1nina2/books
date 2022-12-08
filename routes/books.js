@@ -79,10 +79,18 @@ router.put("/:idEdit", async(req, res) => {
     }
 })
 
+
 router.delete("/:delId", auth, async(req, res) => {
     try {
         let delId = req.params.delId;
-        let data = await BookModel.deleteOne({ _id: delId, user_id: req.tokenData._id })
+        let data;
+        // אם אדמין יכול למחוק כל רשומה אם לא בודק שהמשתמש
+        // הרשומה היוזר איי די שווה לאיי די של המשתמש
+        if (req.tokenData.role == "admin") {
+            data = await BookModel.deleteOne({ _id: delId })
+        } else {
+            data = await BookModel.deleteOne({ _id: delId, user_id: req.tokenData._id })
+        }
         res.json(data);
     } catch (err) {
         console.log(err);
