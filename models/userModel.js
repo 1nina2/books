@@ -33,7 +33,7 @@ exports.createToken = (user_id, role) => {
     // מייצר טוקן, שם תכולה שלו שזה איי די של המשתמש
     // מילה סודית שרק לנו מותר להכיר אותה
     // ותוקף
-    let token = jwt.sign({ _id: user_id, role }, config.tokenSecret, { expiresIn: "60mins" })
+    let token = jwt.sign({ _id: user_id, role }, config.tokenSecret, { expiresIn: "600mins" })
     return token;
 }
 

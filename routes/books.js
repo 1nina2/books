@@ -43,6 +43,16 @@ router.get("/search", async(req, res) => {
         res.status(500).json({ msg: "there error try again later", err })
     }
 })
+router.get("/count", async(req, res) => {
+    try {
+        // .countDocument -> מחזיר את המספר רשומות שקיימים במסד
+        let count = await BookModel.countDocuments({})
+        res.json({ count });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ msg: "there error try again later", err })
+    }
+})
 
 
 

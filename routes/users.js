@@ -58,7 +58,7 @@ router.get("/myInfo", auth, async(req, res) => {
     // כל המשתמשים
 router.get("/usersList", authAdmin, async(req, res) => {
     try {
-        let data = await UserModel.find({}, { password: 0 });
+        let data = await UserModel.find({}, { password: 0 }).limit(20);
         res.json(data)
     } catch (err) {
         console.log(err)

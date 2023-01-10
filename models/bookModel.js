@@ -13,7 +13,7 @@ let bookSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    categories: String,
+    categories_url: String,
     isAvaialble: {
         type: Boolean,
         default: true,
@@ -34,7 +34,7 @@ exports.validateBook = (_reqBody) => {
         reliseDate: Joi.string().min(2).max(99).required(),
         writer: Joi.string().min(2).max(99).required(),
         img_url: Joi.string().min(2).max(200).allow(null, ""),
-        categories: Joi.string().min(2).max(99).required(),
+        categories_url: Joi.string().min(2).max(99).required(),
 
 
 
