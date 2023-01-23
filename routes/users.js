@@ -66,6 +66,16 @@ router.get("/usersList", authAdmin, async(req, res) => {
     }
 })
 
+router.get("/count", authAdmin, async(req, res) => {
+    try {
+        let count = await UserModel.countDocuments({})
+        res.json({ count })
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ msg: "err", err })
+    }
+})
+
 
 
 
@@ -126,5 +136,51 @@ router.post("/login", async(req, res) => {
         res.status(500).json({ msg: "err", err })
     }
 })
+
+
+
+// מאפשר לשנות משתמש לאדמין, רק על ידי אדמין אחר
+router.patch("/changeRole/:userID", authAdmin, async(req, res) => {
+    if (!req.body.role) {
+        return res.status(400).json({ msg: "Need to send role in body" });
+    }
+
+    try {
+        let userID = req.params.userID
+            // לא מאפשר ליוזר אדמין להפוך למשהו אחר/ כי הוא הסופר אדמין
+        if (userID == "6383b324f7679b69bdfe0bbf") {
+            return res.status(401).json({ msg: "You cant change superadmin to user" });
+
+        }
+        let data = await UserModel.updateOne({ _id: userID }, { role: req.body.role })
+        res.json(data);
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ msg: "err", err })
+    }
+})
+
+// מאפשר לגרום למשתמש לא יכולת להוסיף מוצרים חדשים/ סוג של באן שלא מוחק את המשתמש
+router.patch("/changeActive/:userID", authAdmin, async(req, res) => {
+    if (!req.body.active && req.body.active != false) {
+        return res.status(400).json({ msg: "Need to send active in body" });
+    }
+
+    try {
+        let userID = req.params.userID
+            // לא מאפשר ליוזר אדמין להפוך למשהו אחר/ כי הוא הסופר אדמין
+        if (userID == "6383b324f7679b69bdfe0bbf") {
+            return res.status(401).json({ msg: "You cant change superadmin to user" });
+
+        }
+        let data = await UserModel.updateOne({ _id: userID }, { active: req.body.active })
+        res.json(data);
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ msg: "err", err })
+    }
+})
+
+
 
 module.exports = router;
