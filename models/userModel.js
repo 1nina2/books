@@ -15,6 +15,10 @@ let userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    active: {
+        type: Boolean,
+        default: true,
+    },
     abonnement: String,
     location: String,
     // role of the user if regular user or admin

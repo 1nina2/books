@@ -19,5 +19,5 @@ routesInit(app);
 
 const server = http.createServer(app);
 // בשרת אמיתי אם באינוורמינט הגדירו את הפורט שצריך לעבוד מולו
-let port = process.env.PORT || 3000
+let port = process.env.PORT || 3001
 server.listen(port);

@@ -6,26 +6,30 @@ const { auth, authAdmin } = require("../middlewares/auth");
 
 
 router.get("/", async(req, res) => {
-    console.log("get");
-    let perPage = Math.min(req.query.perPage, 20) || 4;
-    let page = req.query.page || 1;
-    let sort = req.query.sort || "_id";
-    let reverse = req.query.reverse == "yes" ? -1 : 1;
+        console.log("get");
+        let perPage = Math.min(req.query.perPage, 20) || 4;
+        let page = req.query.page || 1;
+        let sort = req.query.sort || "_id";
+        let reverse = req.query.reverse == "yes" ? -1 : 1;
 
-    try {
-        let data = await UserModel
-            .find({})
-            .limit(perPage)
-            .skip((page - 1) * perPage)
-            .sort({
-                [sort]: reverse
-            })
-        res.json(data);
-    } catch (err) {
+        try {
+            let data = await UserModel
+                .find({})
+                .limit(perPage)
+                .skip((page - 1) * perPage)
+                .sort({
+                    [sort]: reverse
+                })
+            res.json(data);
+        } catch (err) {
 
-        console.log(err)
-        res.status(500).json({ msg: "err", err })
-    }
+            console.log(err)
+            res.status(500).json({ msg: "err", err })
+        }
+    })
+    // ראוט שבודק שהטוקן תקין ומחזיר מידע עליו כגון איי די של המשתמש פלוס התפקיד שלו
+router.get("/checkToken", auth, async(req, res) => {
+    res.json(req.tokenData);
 })
 
 // בראוטר ניתן להעביר בשרשור המון פונקציות שכדי לעבור אחד מהשני
