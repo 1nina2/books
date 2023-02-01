@@ -4,10 +4,14 @@ const http = require("http");
 const cors = require("cors");
 const { routesInit } = require("./routes/config_routes")
 require("./db/mongoConnect")
+    // חובה כדי שנוכל לעבוד עם קבצים
+const fileUpload = require("express-fileupload");
 
 
 const app = express();
 app.use(cors())
+    // מפעיל את האפשרות באקספרס לעבוד עם קבצים
+app.use(fileUpload({ limits: { fileSize: 1024 * 1024 * 5 } }))
 
 // יודע כל מידע שהשרת מקבל מהצד לקוח
 // לתרגם ל ג'ייסון אם אפשרי
